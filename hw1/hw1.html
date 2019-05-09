@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#info {
+  position: absolute;
+  top: 2%;
+  width: 100%;
+  padding: 10px;
+  text-align: left;
+  color: #ff0000
+}
+body {
+  overflow: hidden
+}
+</style>
+</head>
+<body> 
+<div id="info">
+  <br> Homework 0
+</div>
+<div id='light0' style='top:110px; left:190px'></div>
+<div id='light1' style='top:150px; left:230px'></div>
+<div id='light2' style='top:200px; left:185px'></div>
+<div id='light3' style='top:250px; left:234px'></div>
+<div id='light4' style='top:300px; left:160px'></div>
+<div id='light5' style='top:350px; left:235px'></div>
+<div id='light6' style='top:400px; left:141px'></div>
+<div id='light7' style='top:450px; left:230px'></div>
+
+
+<button id="switch" style="position:absolute;left:380px">light on</button>
+<img src="https://i.imgur.com/xVA60jg.jpg" style = width = "800" height = "600">
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>
+class Light {
+	constructor (name,color){
+		this.name = '#' + name;
+		this.color = color;
+		$(this.name).css ("position", "absolute");
+		$(this.name).css ("border-radius", "100em");
+		$(this.name).css ("width", "20px");
+		$(this.name).css ("height", "20px");
+		$(this.name).css ('background-color', "hsl(0, 0%, 50%)");
+		}
+	turnOff() {
+		$(this.name).css ('background-color', "hsl(0, 0%, 50%)");
+	}
+	rancolor() {
+		let num = Math.random() * 200;
+		return "hsl(" + num + ",43%,51%)";
+	}
+	changeColor(name) {
+    $(name).css ('background-color', this.rancolor);
+  }
+}
+var another;
+var Lamps = [];
+var flash = false;
+var start;
+
+init();
+
+
+function init() {
+	var l0 = new Light('light0' , "hsl(0, 0%, 50%)");
+	Lamps.push(l0);
+	var l1 = new Light('light1' , "hsl(0, 0%, 50%)");
+	Lamps.push(l1);
+	var l2 = new Light('light2' , "hsl(0, 0%, 50%)");
+	Lamps.push(l2);
+	var l3 = new Light('light3' , "hsl(0, 0%, 50%)");
+	Lamps.push(l3);
+	var l4 = new Light('light4' , "hsl(0, 0%, 50%)");
+	Lamps.push(l4);
+	var l5 = new Light('light5' , "hsl(0, 0%, 50%)");
+	Lamps.push(l5);
+	var l6 = new Light('light6' , "hsl(0, 0%, 50%)");
+	Lamps.push(l6);
+	var l7 = new Light('light7' , "hsl(0, 0%, 50%)");
+	Lamps.push(l7);
+}
+function chaCOLOR(){
+	for(let i = 0; i < Lamps.length;i++){
+	Lamps[i].changeColor(Lamps[i].name);
+	}
+}
+
+$('#switch').click (function() {
+	if(flash == false){
+		$('#switch').text('light off');
+		flash = !flash;
+		start = setInterval (function() { chaCOLOR() ;} , 500);
+	}
+	else if(flash == true){
+		$('#switch').text('light on');
+		clearInterval(start);
+		for(let i = 0; i < Lamps.length;i++){
+		Lamps[i].turnOff();
+		}
+		flash = !flash;
+	}
+	console.log(flash)
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<html>
+
+<head>
+<style>
+body {
+  overflow: hidden
+}
+</style>
+</head>
+<h1 style="text-align:center">Node.js, Shelljs, Native Methods</h1>
+
+<hr>
+<div id="container" style="float:left; margin:3px; width:40vw; height:40vw">
+</div>
+<div style="float:left; margin-left: 10px; width:32vw;">circle-R:
+  <input id="sizeR" style="width:100%" type="range" max="15" min="2" value="5">
+  <br><br>
+  <button id="toggle" style="width:100%">Toggle motion</button>
+  <p id='greeting'></p>
+</div>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+<script>
+
+$('#sizeR').change ( function() {
+	radius = $(this).val();
+	scene.remove(circle);
+	circle = new THREE.Mesh (new THREE.CircleGeometry (radius,20), new THREE.MeshBasicMaterial());
+	scene.add (circle);
+});
+
+$('#toggle').click ( function() {
+	motion = !motion;
+  console.log (motion)
+});
+
+function getRandom(min,max){
+    return Math.floor(Math.random()*(max-min+1))+min;
+};
+
+
+var camera, scene, renderer, circle, radius ,cube,pick;
+var pos, vel;
+var motion = true;
+var raycaster = new THREE.Raycaster();
+var pickables = [];
+var mouse = new THREE.Vector2();
+
+
+init();
+animate();
+
+function init() {
+
+  var ww = $("#container").innerWidth();
+  var hh = $("#container").innerHeight();
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(ww, hh);
+  renderer.setClearColor(0x888888);
+  $("#container").append(renderer.domElement);
+  
+  ////////////////////////////////////////////////
+
+  scene = new THREE.Scene();
+  camera = new THREE.OrthographicCamera (-50,50,50,-50,1, 1000);
+  camera.position.z = 500;
+
+	radius = 5;
+	circle = new THREE.Mesh (new THREE.CircleGeometry (radius,20), new THREE.MeshBasicMaterial());
+	//circle.position.set(,10,0)
+	scene.add (circle);
+	circle.position.set(getRandom(-34,34),getRandom(-34,34),0)
+	
+  let geometry = new THREE.Geometry();
+  geometry.vertices.push(
+    new THREE.Vector3(-40, -40, 0),
+    new THREE.Vector3(40, -40, 0),
+    new THREE.Vector3(40, 40, 0),
+    new THREE.Vector3(-40, 40, 0),
+    new THREE.Vector3(-40, -40, 0));
+
+  let border = new THREE.Line(geometry, new THREE.LineBasicMaterial({
+    color: 0x0000ff
+  }));
+  scene.add(border);
+  
+  
+  
+  
+  
+  pos = circle.position;
+  vel = new THREE.Vector3(getRandom(-10,10),getRandom(-10,10),0);
+  
+  
+  cube =  new THREE.Mesh (new THREE.PlaneGeometry (30,10,32), new THREE.MeshBasicMaterial({color:0x006655}));
+  scene.add(cube);
+  pick = new THREE.Mesh (new THREE.PlaneGeometry (80,80,32), new THREE.MeshBasicMaterial({wireframe:false}));
+  //scene.add(pick);
+  pick.name = "pickk";
+  pickables.push(pick);
+  
+  window.addEventListener('resize', onWindowResize, false);
+  document.addEventListener('mousedown', onDocumentMouseDown, false);
+
+}
+
+function onWindowResize() {
+  var ww = $("#container").innerWidth();
+  var hh = $("#container").innerHeight();
+
+  camera.aspect = ww / hh;
+  camera.updateProjectionMatrix();
+  renderer.setSize(ww, hh);
+}
+
+function animate() {
+
+	dt = motion ? 0.1 : 0;
+	pos.add (vel.clone().multiplyScalar(dt));
+  
+	if (Math.abs(pos.x) > 40-radius) {
+  	vel.x *= -1;  	
+  }
+	if (Math.abs(pos.y) > 40-radius) {
+  	vel.y *= -1;  	
+  }
+  circle.position.copy (pos);
+  
+  
+  
+    var Rmax = cube.position.clone().add (new THREE.Vector3(15 , 5 , 0));
+	var Rmin = cube.position.clone().sub (new THREE.Vector3(15 , 5 , 0));
+	var Cpos = circle.position;
+  
+  $.ajaxSetup({ async: false});
+	$.get("http://127.0.0.1:1337/api?RmaxX="+ Rmax.x +"&RmaxY="+ Rmax.y +"&RminX="+ Rmin.x +"&RminY="+ Rmin.y +"&Cx="+ Cpos.x +"&Cy="+ Cpos.y +"&radius="+ radius,  function( data ){
+	if(data && data.output){
+			var check = data.output.split (" ");
+			if(check[0] == 1){
+				circle.material.color.setHSL( 1, 1, 0.5 );
+			}
+			else{
+				circle.material.color.setHSL( 1, 1, 1);
+			}
+			}
+	
+	});
+  
+  
+  
+  
+  requestAnimationFrame(animate);
+  render();
+}
+
+function render() {
+  renderer.render(scene, camera);
+}
+
+function onDocumentMouseDown(event) {
+    event.preventDefault();
+	var viewportPos =$('#container').get(0).getBoundingClientRect(); 
+	mouse.x = ((event.clientX - viewportPos.left) / $('#container').innerWidth()) * 2 - 1;
+	mouse.y = -((event.clientY - viewportPos.top) / $('#container').innerHeight()) * 2 + 1;
+
+  // find intersections
+  raycaster.setFromCamera(mouse, camera); 
+  
+  var intersects = raycaster.intersectObjects(pickables);
+  if (intersects.length > 0) {	
+	console.log(pickables)
+	console.log(cube.position)
+	console.log(intersects[0].point)
+	cube.position.copy(intersects[0].point);
+  }
+}
+
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,995 @@
+<html><head>
+<style>
+#info {
+  position: absolute;
+  top: 2%;
+  width: 100%;
+  padding: 10px;
+  text-align: left;
+  color: #ffff00
+}
+body {
+  overflow: hidden
+}
+</style>
+</head>
+
+<body>
+<h1 style="text-align:center">
+  OverWatch
+</h1>
+<hr>
+	<div id="info">
+	<button id="play" style="position:absolute;width:5%;left:1%;top:100%">Play</button> 
+</div>
+
+	<audio id="soundtrack" autoplay="" loop="" style="display:none">
+	<source src="sound/bgm.mp3" type="audio/mp3">
+	</audio>
+	<audio id="pick" style="display:none">
+	<source src="sound/1.mp3" type="audio/mp3">
+	</audio>
+	<audio id="pick2" style="display:none">
+	<source src="sound/2.mp3" type="audio/mp3">
+	</audio>
+	<audio id="pick3" style="display:none">
+	<source src="sound/3.mp3" type="audio/mp3">
+	</audio>
+	<audio id="pick4" style="display:none">
+	<source src="sound/4.mp3" type="audio/mp3">
+	</audio>
+	<audio id="pick5" style="display:none">
+	<source src="sound/5.mp3" type="audio/mp3">
+	</audio>
+	<audio id="pick7" style="display:none">
+	<source src="sound/7.mp3" type="audio/mp3">
+	</audio>
+	<audio id="pick8" style="display:none">
+	<source src="sound/8.mp3" type="audio/mp3">
+	</audio>
+	<audio id="pick9" style="display:none">
+	<source src="sound/9.mp3" type="audio/mp3">
+	</audio>
+	<audio id="pick10" style="display:none">
+	<source src="sound/10.mp3" type="audio/mp3">
+	</audio>
+	<audio id="pick11" style="display:none">
+	<source src="sound/11.mp3" type="audio/mp3">
+	</audio>
+	<audio id="pick12" style="display:none">
+	<source src="sound/12.mp3" type="audio/mp3">
+	</audio>
+	
+	
+	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+	<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+	<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/loaders/MTLLoader.js"></script>
+	<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/loaders/OBJLoader.js"></script>
+
+<a href="0401.jpg" style="position:absolute;top:10px;left:20px;font-family:Microsoft JhengHei;">Design Map</a>	
+
+<div id="container" style="float:left;width:37vw;height:37vw;background-color:pink;">
+  <canvas id="mycanvas" style="width:37vw;height:37vw"></canvas>
+</div>
+
+<img src='strts/pic.jpg' usemap="#smallmap" style="float:left;width:240px;height:240px;margin-left:auto; margin-right:auto">
+
+<select id="selectCHAR" onchange="changeCHAR();"style="top:280px;font-size:120%;" value ="0">
+  <option value="0">OverWatch</option>
+  <option value="1">士兵76</option>
+  <option value="2">D.VA</option>
+  <option value="3">碧姬</option>
+  <option value="4">慈悲</option>
+  <option value="5">源氏 </option>
+  <option value="6">毀滅拳王 </option>
+  <option value="7">莫伊拉 </option>
+  <option value="8">艾西 </option>
+  <option value="9">火爆鋼球 </option>
+  <option value="10">禪亞塔 </option>
+  <option value="11">炸彈鼠 </option>
+  <option value="12">閃光 </option>
+</select>
+
+<div style="margin:5px;width:40vw;height:12vw;float:right;overflow:scroll">
+<h2 id="charname" style="text-align:center;">OverWatch</h2>
+<p id="Description" style="font-family:Microsoft JhengHei;">《鬥陣特攻》設定於「智械危機」結束30年後，其背景故事跨越未來地球60年。在智械危機之前，人類一直處於科技高度發達的黃金時代。人類開發了具有人工智慧的機器人，它們在自動化的「智械中樞」中生產並在全球投入使用。後來，智械中樞開始生產一系列敵對的機器人，它們轉而攻擊人類。聯合國迅速組建了國際特遣部隊捍衛者，致力於消除智械威脅並恢復秩序。<br><br>兩名退伍軍人傑克·莫里森和加布里爾·雷耶斯負責管理捍衛者。儘管捍衛者成功地鎮壓了機器人起義，並將一批優秀的人才帶到了科技前沿，指揮官莫里森和萊耶斯的關係卻發生裂痕，後者成立了鬥陣特攻秘密行動部門「黑衛部隊」。捍衛者維護了世界幾十年的和平，這一時期稱為「鬥陣特攻時代」，但莫里森與雷耶斯之間的分歧卻逐漸加劇。捍衛者多次受到有不法行為的指控，輿論對此一片譁然，促使聯合國開啟調查。在此期間，一場爆炸摧毀了捍衛者位於瑞士的總部，莫里森和雷耶斯被官方宣布死亡。聯合國通過佩特拉法案，解散了捍衛者，並禁止任何鬥陣特攻類型的活動。<br><br>《鬥陣特攻》的故事發生於佩特拉法案生效多年後。沒有了捍衛者，大集團開始控制政府，戰爭一觸即發。俄羅斯出現了第二次智械危機的跡象。捍衛者前成員決定改革組織，在佩特拉法案的壓力下，招募老成員，並在戰鬥中獲得新成員。</p>
+</div>
+
+<div style="position:relative;left:38%;top:230px;">
+<div id="container2" style="position:absolute;left:200px;width:180px;height:180px;background-color:black;top:30px">
+  <canvas id="mycanvas2" style = "width:180px;height:180px;"></canvas>
+</div>
+<div id="container3" style="position:absolute;top:230px;width:180px;height:180px;background-color:yellow;">
+  <canvas id="mycanvas3" style = "width:180px;height:180px;"></canvas>
+</div>
+<div id="container4" style="position:absolute;width:180px;height:180px;background-color:blue;top:30px">
+  <canvas id="mycanvas4" style = "width:180px;height:180px;"></canvas>
+</div>
+<div id="container5" style="position:absolute;top:230px;left:200px;width:180px;height:180px;background-color:red;">
+  <canvas id="mycanvas5" style = "width:180px;height:180px;"></canvas>
+</div>
+<div id="container6" style="position:absolute;left:420px;width:23vw;height:23vw;background-color:orange;">
+  <canvas id="mycanvas6" style = "width:23vw;height:23vw;"></canvas>
+  <div>
+  <img src='https://imgur.com/uPa0IBb.png' usemap="#cameraSwitch" style="float:left;width:80px;height:80px;margin: 0 auto;z-index:1">
+  <img src='https://imgur.com/sFe1i1F.png' usemap="#cameraSwitch1" style="float:right;width:80px;height:80px;margin: 0 auto;z-index:1">
+  <br>
+  <div id="cameraname" style="border-width:3px;border-style:solid;padding:5px;text-align:center;width: 160px; margin: 0 auto;z-index:-1">
+	camera free
+	</div>
+	</div>
+	<map name="cameraSwitch">
+	  <area shape="circle" class='butom' id='left' coords="45,38,32" href="#">
+	<map name="cameraSwitch1">
+	  <area shape="circle" class='butom' id='right' coords="45,38,32" href="#">
+	</map>
+</div>
+</div>
+<img src='https://imgur.com/BBSipuE.png' usemap="#cameraStop" style="position:absolute;width:80px;height:80px;right:1%;top:60%">
+<img src='https://imgur.com/yUz06oh.png' usemap="#camzoom" style="position:absolute;width:80px;height:80px;right:1%;top:72%">
+<img src='https://imgur.com/HJU5oQT.png' usemap="#camzoom2" style="position:absolute;width:80px;height:80px;right:1%;top:84%">
+<map name="cameraStop">
+	  <area shape="circle" class='Stopbutom' id='stop' coords="40,40,40" href="#">
+	</map>
+<map name="camzoom">
+	  <area shape="circle" class='zoom' id='zoomIn' coords="40,40,20" href="#">
+	</map>	
+<map name="camzoom2">
+	  <area shape="circle" class='zoom' id='zoomOut' coords="40,40,20" href="#">
+	</map>
+	
+<map name="smallmap">
+	  <area shape="circle" class="smallmap" id="0" coords="41,99,14" href="#">
+	  <area shape="circle" class="smallmap" id="1" coords="40,21,14" href="#">
+	  <area shape="circle" class="smallmap" id="2" coords="23,63,14" href="#">
+	  <area shape="circle" class="smallmap" id="3" coords="88,40,14" href="#">
+	  <area shape="circle" class="smallmap" id="4" coords="189,24,14" href="#">
+	  <area shape="circle" class="smallmap" id="5" coords="216,53,14" href="#">
+	  <area shape="circle" class="smallmap" id="6" coords="190,79,14" href="#">
+	  <area shape="circle" class="smallmap" id="7" coords="191,106,14" href="#">
+	  <area shape="circle" class="smallmap" id="8" coords="41,127,14" href="#">
+	  <area shape="circle" class="smallmap" id="9" coords="21,188,14" href="#">
+	  <area shape="circle" class="smallmap" id="10" coords="58,187,14" href="#">
+	  <area shape="circle" class="smallmap" id="11" coords="88,188,14" href="#">
+	  <area shape="circle" class="smallmap" id="12" coords="117,219,14" href="#">
+</map>
+<script>
+
+var renderer, camera, controls, scene;
+var cameraObj,cameraObj2,cameraObj3,cameraObj4;
+var safety = 0;
+var angle = 0,angle2 = 0,angle3 = 0,angle4 = 0;
+var sign = 1,sign2 = 1,sign3 = 1,sign4 = 1;
+var cameraview = 0;
+var viewPic = 0;
+var pik1,pik2,pik3,pik4,pik5,pik7,pik8,pik9,pik10,pik11,pik12;
+var soundTrack;
+var isPaused = false;
+var soundVal = 1.0, sign = 1.0;
+
+$('#play').click ( function() {
+	isPaused = !isPaused;
+	if (isPaused) { 
+		$('#play').text ('Play')
+		soundTrack.pause()
+	} else {
+		$('#play').text ('Pause')
+		soundTrack.play()
+	}
+});
+
+
+var rotcam1=true,rotcam2=true,rotcam3=true,rotcam4=true;
+$('.butom').click(function(e) {
+  e.preventDefault();
+	if (this.id === 'right') {
+		if(cameraview==4){
+			cameraview=0;
+		}
+		else{
+	cameraview=cameraview+1;
+	}
+  	console.log(cameraview);
+  } else {
+		if(cameraview==0){
+			cameraview=4;
+		}
+		else{
+	cameraview=cameraview-1;
+	}
+  	console.log(cameraview);
+  }
+})
+
+$('.Stopbutom').click(function(e) {
+  e.preventDefault();
+	if(cameraview==0) {
+		console.log(camera.position);
+	}
+	if(cameraview==1){
+		rotcam1=!rotcam1;
+	}
+	if(cameraview==2){
+		rotcam2=!rotcam2;
+	}
+	if(cameraview==3){
+		rotcam3=!rotcam3;
+	}
+	if(cameraview==4){
+		rotcam4=!rotcam4;
+	}
+
+})
+
+$('.zoom').click(function(e) {
+  e.preventDefault();
+	if(this.id === 'zoomOut') {
+		if(cameraview==0) {
+		}
+		if(cameraview==2){
+			console.log("gg")
+			if(sCam2.fov <= 50)sCam2.fov +=10;
+			sCam2.updateProjectionMatrix()
+		}
+		if(cameraview==1){
+			if(sCam.fov <= 50)sCam.fov +=10;
+			sCam.updateProjectionMatrix()
+		}
+		if(cameraview==3){
+			if(sCam3.fov <= 50)sCam3.fov +=10;
+			sCam3.updateProjectionMatrix()
+		}
+		if(cameraview==4){
+			if(sCam4.fov <= 50)sCam4.fov +=10;
+			sCam4.updateProjectionMatrix()
+		}
+	}
+	else if(this.id === 'zoomIn') {
+		if(cameraview==0) {
+		}
+		if(cameraview==2){
+			console.log("ff")
+			if(sCam2.fov >= 30)sCam2.fov -=10;
+			sCam2.updateProjectionMatrix()
+		}
+		if(cameraview==1){
+			if(sCam.fov >= 30)sCam.fov -=10;
+			sCam.updateProjectionMatrix()
+		}
+		if(cameraview==3){
+			if(sCam3.fov >= 30)sCam3.fov -=10;
+			sCam3.updateProjectionMatrix()
+		}
+		if(cameraview==4){
+			if(sCam4.fov >= 30)sCam4.fov -=10;
+			sCam4.updateProjectionMatrix()
+		}
+	}
+
+
+})
+
+$('.smallmap').click(function(e) {
+  e.preventDefault();
+  
+	if(this.id==0) {
+		viewPic = 0;
+		console.log(viewPic);
+		$('#Description').html('《鬥陣特攻》設定於「智械危機」結束30年後，其背景故事跨越未來地球60年。在智械危機之前，人類一直處於科技高度發達的黃金時代。人類開發了具有人工智慧的機器人，它們在自動化的「智械中樞」中生產並在全球投入使用。後來，智械中樞開始生產一系列敵對的機器人，它們轉而攻擊人類。聯合國迅速組建了國際特遣部隊捍衛者，致力於消除智械威脅並恢復秩序。<br><br>兩名退伍軍人傑克·莫里森和加布里爾·雷耶斯負責管理捍衛者。儘管捍衛者成功地鎮壓了機器人起義，並將一批優秀的人才帶到了科技前沿，指揮官莫里森和萊耶斯的關係卻發生裂痕，後者成立了鬥陣特攻秘密行動部門「黑衛部隊」。捍衛者維護了世界幾十年的和平，這一時期稱為「鬥陣特攻時代」，但莫里森與雷耶斯之間的分歧卻逐漸加劇。捍衛者多次受到有不法行為的指控，輿論對此一片譁然，促使聯合國開啟調查。在此期間，一場爆炸摧毀了捍衛者位於瑞士的總部，莫里森和雷耶斯被官方宣布死亡。聯合國通過佩特拉法案，解散了捍衛者，並禁止任何鬥陣特攻類型的活動。<br><br>《鬥陣特攻》的故事發生於佩特拉法案生效多年後。沒有了捍衛者，大集團開始控制政府，戰爭一觸即發。俄羅斯出現了第二次智械危機的跡象。捍衛者前成員決定改革組織，在佩特拉法案的壓力下，招募老成員，並在戰鬥中獲得新成員。</p>');
+	}
+	if(this.id==1) {
+		pik1.play();
+		viewPic = 1;
+		console.log(viewPic);
+		$('#charname').html('士兵76 <br> 「此刻，人人都是鬥士。」');
+		$('#Description').html('士兵76被各國列為追捕對象，為了揭發捍衛者解散的幕後真相，他孤身發起戰爭。<br><br>士兵76在全球各地發起一連串的攻擊事件，金融機構、地下公司，以及捍衛者設施都成為他的攻擊目標。雖然他的動機為何，外界無從得知，不過有些人認為他就是前捍衛者成員，誓言要揪出導致捍衛者解散的幕後黑手。<br><br>雖然身分成謎，不過大家相信他曾在美國的「士兵補強計畫」中受過訓練。他的肉體能力超越一般傳統士兵，再加上其他方面的強化，使他成為一名超絕的戰士。而且他手上還持有從捍衛者設施中偷走的劃時代高科技武器。<br><br>士兵76一直在調查，想找出有哪些人該為捍衛者的解散負起責任，沒人能阻止他將這些人繩之以法。');
+	}
+	if(this.id==2) {
+		pik2.play();
+		viewPic = 2;
+		$('#charname').html('D.VA <br> 「就是要贏。」');
+		$('#Description').html('D.Va運用之前身為職業電競選手的高超技術，駕駛韓國最先進的機甲來保護家園。<br><br>20年前，巨大智械怪物從中國東海深處竄出，朝南韓發動攻擊。這個巨大、笨重的怪物對沿岸城市造成了莫大傷亡，然後返回深海之中。因此，南韓政府決定構建一支被稱為「MEKA」的無人機械裝甲戰鬥部隊，好在未來要面對的智械威脅中，保護人民居住的城市。<br><br>政府所害怕的事情並非空穴來風，因為每隔幾年，就會有個怪物從海底出現，攻擊南韓和附近的國家。智械機器人從這些攻擊行動中不斷學習，時常進行調整，以不同方式、不同外貌，搭配新的武器和能力發動攻擊。每次攻擊最後都會陷入僵局，雖然擊敗了怪物，但是卻無法將其完全摧毀。<br><br>智械的手段持續演進，終於成功癱瘓MEKA部隊的無人機控制網路，軍方在不得已的情況下，只好以駕駛員來操縱機甲。在苦無適當人選的情況下，政府決定招募韓國職業電競選手，因為他們具備相當的反應速度和直覺，相當適合控制機甲配備的先進武器系統。政府最後挑選了一批頂尖明星選手，其中一位就是「D.Va」宋荷娜。她除了因為高超技巧而著名，同時也是一位相當具有侵略性的選手，為了勝利不惜一切代價，她從來不會對敵人手下留情。<br><br>D.Va把這項新任務看成是比賽，一收到通知，就毫不畏懼地駕駛MEKA機甲衝向戰場，準備為國家擋下敵人。她最近更開始對粉絲直播整場戰鬥行動，她的一舉一動逐漸讓她受到世界的矚目。');
+		console.log(viewPic);
+	}
+	if(this.id==3) {
+		pik3.play();
+		viewPic = 3;
+		$('#charname').html('碧姬 <br> 「我會證明自己的能耐！」');
+		$('#Description').html('碧姬‧林霍姆不再置身事外，她拿起武器捍衛那些需要保護的人民。<br><br>碧姬是武器工程師托比昂‧林霍姆最小的女兒，也是他第一個對機械工程展現興趣的小孩。碧姬大部分的閒暇時刻都在父親的工作檯邊，一邊見習工作﹑一邊磨練技術。碧姬承襲了父親在工程學上的天賦，但是她的專精和父親不同。托比昂製造出厲害武器而聞名世界（也可以說是惡名昭彰），而碧姬最感興趣的是製造裝甲與防禦系統。<br><br>每個人都以為碧姬會繼續當學徒，跟隨父親的腳步，但是她的計畫卻因為生命中另一位重要人物而改變。這個人是她父親的摯友與捍衛者同袍，萊因哈特‧威爾海姆。萊因哈特和林霍姆家族關係密切，還是碧姬的教父。在碧姬的成長過程中，他曾告訴她許多英雄與騎士精神的故事。在他退休與捍衛者解散之後，萊因哈特宣布他將踏上旅程，成為捍衛正義的遊俠騎士。在他出發冒險之前，碧姬出乎意料地要求擔任他的隨從一起同行。萊因哈特答應了。<br><br>身為隨從的碧姬肩負許多責任，其中最重要的是她得負責保養萊因哈特的十字軍護甲（她熟悉這款設計，因為目前的這一副正是她父親所製作）。但是她逐漸發現，她主要的工作應該是照顧萊因哈特。他的身體歷經長年戰鬥而衰弱，而她得保護他不因為狂熱的信念而受更多的傷。<br><br>最後她終於瞭解，只當個工程師是不夠的。要想支援萊因哈特，最好的方式是自己也成為一名戰士。於是，當萊因哈特訓練她的戰鬥技巧時，碧姬開始暗中製作她自己的護甲。<br><br>現在，碧姬與萊因哈特一起衝鋒陷陣，從一旁保護他，同時幫助其他有需要的人。透過一場場戰鬥，這對騎士與隨從在旅途中努力讓世界變得更加美好。');
+		console.log(viewPic);
+	}
+	if(this.id==4) {
+		pik4.play();
+		viewPic = 4;
+		$('#charname').html('慈悲 <br> 「英雄永不消逝。」');
+		$('#Description').html('安琪拉‧齊格勒博士是位醫術高超的醫療人員、聰明的科學家，同時也是和平的忠實擁護者，對於受她照顧的人來說，她無疑就是個守護天使。<br><br>安琪拉原先是在一間著名的瑞士醫院工作，並且成為外科手術團隊的主治醫生，她在轉向應用奈米生物科技領域之後取得了重大突破，針對足以威脅性命的疾病和傷殘人員開發出效果卓越的療法。也就是因為這個專業領域上的成就，吸引了捍衛者的注意。<br><br>因為安琪拉的雙親都在大戰中失去性命，她相當反對組織以軍事力量達成世界和平的方式。但最終安琪拉發現，在捍衛者裡讓她有機會去拯救更多生命。安琪拉身為捍衛者醫學研究方面的領導人，試著將她的醫療成果應用在充滿危機的前線，因而催生了女武神快速反應裝，安琪拉本人也經常穿著這身配備參與捍衛者的任務。<br><br>即便她為捍衛者做出了許多奉獻，安琪拉還是經常覺得她的理想和組織的整體目標有所衝突。於是在捍衛者解散之後，安琪拉便獻身於那些因戰亂而受苦的人們。<br><br>即便是將大部分的時間用來照顧世界上戰亂地區流離失所的人們，但當無辜的人們受威脅時，安琪拉‧齊格勒博士還是會穿著女武神急救裝現身。');
+		console.log(viewPic);
+	}
+	if(this.id==5) {
+		pik5.play();
+		viewPic = 5;	
+		$('#charname').html('源氏 <br> 「就算失去身體，我也絕對不會喪失心中的榮耀。」');
+		$('#Description').html('島田源氏原本十分排斥現在這個半人半機械的身體，如今他已經接受這個事實，並且能夠運用自如，同時發現更高層次的人性真諦。<br><br>源氏出生於島田忍者世家，他是年紀最小的老么，過著富貴榮華的生活。他對家族所進行的非法事業毫無興趣，雖然他熱愛忍者修業，也在這方面表現十分優異，不過他大部份的時間都過著花花公子般的生活。在父親的寵愛與保護下，源氏過著無憂無慮的生活；家族中有許多人覺得他會成為家族的弱點，因此開始怨恨他的父親。後來，島田組的首領早逝，源氏的大哥半藏要求他積極參與組織內的事務，支撐父親留下的龐大帝國；但是源氏拒絕了，半藏為之震怒。兄弟倆的緊張氣氛演變為暴力衝突，源氏輸了，身陷死亡邊緣。<br><br>半藏以為自己親手殺死了弟弟，不過多虧捍衛者和安琪拉‧齊格勒醫生從中介入，從鬼門關前救回了源氏。這支全球維安部隊認為在往後對抗島田組的戰鬥中，源氏會成為有力的一步棋。源氏的傷勢漸漸復原，捍衛者決定改造他的身體，好爭取他的支持。他的身體有大半被替換成生化機械，大幅提高他已經十分敏捷的速度，同時也讓他原本卓越的忍者身手更上一層樓。源氏化為一具活生生的兵器，全心投入摧毀島田家犯罪帝國這個任務。<br><br>但是隨著時間過去，源氏漸漸感受到自己的身體在互相抗衡；肉身與機械互相排斥，他也不知道他到底是個怎樣的人。他在任務結束後，離開了捍衛者，然後踏上尋求存在意義的旅程。他流浪多年，然後遇上智械僧侶禪亞塔。一開始，源氏不願接受禪亞塔的智慧箴言，但是這位仁慈的智械機械人並沒有因此放棄。慢慢的，禪亞塔成為他的導師，在這位僧侶的悉心開導下，他終於接受了這個身體，肉身與機械和諧並存。他學會了去接受事實，即使身體是由生化機械所構成，並無損他自身靈魂的完整性，於是他將這個身體視為一種禮物，視為一種獨特的優勢。<br><br>於是，他這輩子第一次獲得真正的自由。雖然他不知道，他的未來歸向何方。');
+		console.log(viewPic);
+	}
+	if(this.id==6) {
+
+		viewPic = 6;
+		$('#charname').html('毀滅拳王 <br> 「衝突，為我們帶來進化。」');
+		$('#Description').html('近期逃出牢獄的毀滅拳王決心重返世界製造新的衝突，他相信這能使人類變得更堅強。<br><br>阿坎德‧歐岡帝姆出身於一個地位崇高的奈及利亞家庭，並繼承家族的義肢科技公司。歐岡帝姆非常聰明而且充滿個人魅力，他協助擴展家族事業，為企業的發展定位，並同時醉心於熱愛的嗜好：格鬥武術。他進行傳統的非洲格鬥訓練，包括「丹貝」與「吉迪博」，以及摔角和其他現代格鬥技能，將技巧融合到招式中。歐岡帝姆到處參賽，以他的直覺與能力來看穿對手的心思，同時運用敏捷的動作和無窮的蠻力擊垮對方。<br><br>他在智械危機期間失去右臂，他的武術生涯看似尚未達到巔峰便已結束。家族企業生產的生化機械義肢讓他從重創中康復，甚至變得更加強大，可是他也從此無緣參加競賽。他嘗試將對於武術的熱誠投入事業當中，但是卻填補不了內心的空虛…直到第二代毀滅拳王「努巴尼之禍」阿金吉德‧阿迪耶米給了他一個新的機會。<br><br>阿迪耶米讓歐岡帝姆擔任傭兵與他一起戰鬥。歐岡帝姆剛開始有所提防，但是後來卻發現他有了新天地來施展強大的力量。最後阿迪耶米帶領他加入利爪組織。利爪組織相信人類能從衝突中成長茁壯與歐岡帝姆的個人經驗不謀而合。此外，利爪組織的權力鬥爭帶來新的挑戰，讓他在幕後謀畫的同時也能在戰場上發揮實力。<br><br>阿迪耶米是利爪組織的得力助手，但是組織從歐岡帝姆的才智和鼓舞他人的領導才能看出他的潛能。阿迪耶米滿足於掠奪努巴尼所獲得的財富，歐岡帝姆卻有更宏大的願景。抱負上的差異最後導致歐岡帝姆動手除掉恩師，奪走毀滅拳王的披風與裝甲拳套。<br><br>身為新任毀滅拳王，歐岡帝姆在利爪組織中擁有崇高的地位，並協助策畫一場武裝衝突，組織希望有朝一日能在全世界掀起動亂。但是就在計畫即將實現之際，捍衛者特遣隊擊敗歐岡帝姆，並且捉住了他，當時成員包含閃光、溫斯頓與源氏。好幾年來，他被監禁在戒備森嚴的機密設施裡，在裡頭耐心等待機會逃亡。<br><br>終於，他察覺復出的時候到了。他逃出監獄，與努巴尼新亮相的OR15型機器人展開戰鬥，取得壓倒性的勝利，奪走毀滅拳王的裝甲拳套。現在，他在利爪組織高層重獲一席之地，準備推動下一波襲捲世界的戰爭。');
+		console.log(viewPic);
+	}
+	if(this.id==7) {
+		pik7.play();
+		viewPic = 7;
+		$('#charname').html('莫伊拉 <br> 「科學會揭示真理。」');
+		$('#Description').html('科學家莫伊拉‧歐卓藍絕頂聰明﹑正邪莫辨，可說是基因工程界的佼佼者。她一直在研究如何重新編寫生命構成的基礎元素。<br><br>數十年前，歐卓藍發表一篇廣受爭議的報告，裡頭詳述可以從細胞層面改變DNA﹑自訂基因工程的方法。這似乎是戰勝疾病﹑拓展人類潛能的一大進展。<br><br>她隨即受到同儕的撻伐。許多人由於這項研究所引發的道德問題而認為她的工作具有危險性，甚至有人認為歐卓藍跟為了追求科學進展而引發智械危機的人沒有兩樣。此外，由於其他的基因工程學家無法複製莫伊拉的研究結果，使得人們對她的研究發現產生懷疑。她的研究報告不僅沒有讓研究生涯更進一步，反而重創她的名聲。<br><br>就在這個時候，她意外得到捍衛者秘密部門「黑衛部隊」的援助。她在幕後繼續工作，同時為組織研發新的武器與科技。她的身分極度保密，直到在威尼斯發生的那場意外後才洩漏出去，當時許多捍衛者的高階官員皆否認莫伊拉是他們的成員。<br><br>捍衛者解散之後，歐卓藍不得不尋求非正統的協助。此時，成立綠洲城的科學組織邀請她加入。然而，傳聞行事詭秘的利爪組織已支援她多年，以使用研究成果作為交換來贊助她的實驗。<br><br>雖然歐卓藍為了在科學方面有所突破，不惜採取任何手段，世人對她的研究卻不太了解。不過現在，她擺脫了所有的束縛，改變只是時間的問題。');
+		console.log(viewPic);
+	}
+	if(this.id==8) {
+		pik8.play();
+		viewPic = 8;
+		$('#charname').html('艾西 <br> 「我的場子，只能由我做主。」');
+		$('#Description').html('艾西是亡鎖幫野心勃勃又有謀略的首領，而且是地下黑幫中備受推崇的人物。<br><br>艾西出身富裕，從小就在上流社會中長大。她的雙親是搶手的商業顧問，專門指導世界各地權傾一時的公司總裁。儘管父母無暇照顧她（大部分的時候將她交給家裡的智械管家鮑伯），但是他們盡全力栽培艾西成為社會菁英。在某次機遇中，艾西遇見當地一位名叫傑西‧麥卡利的街頭混混，捲入一場即興的犯罪中。這次經驗讓她大開眼界，找到了自己真正的興趣。智取對手時的滿足感與逃亡的刺激，讓她就此踏上亡命之路。<br><br>她跟著其他三位亡鎖幫的元老一起闖蕩江湖，著手犯下規模更大﹑金額更高的搶案來打響名聲。亡鎖幫的快速崛起，使他們與美國西南部的其他犯罪組織產生摩擦；衝突往往一發不可收拾。經過多年的小規模戰鬥與流血事件，艾西終於召集各大幫派的首腦。<br><br>艾西看出結合各方勢力的發展潛力。她運用從父母身上學到的商業策略，將制度帶入幫派。她提議各幫派可以齊心合作（至少不要互相攻擊）。她的原則是：遵守諾言﹑不遵守法律﹑尊重彼此的領域，而且嚴懲叛徒。<br><br>自從不用再花精力在幫派內鬥上，艾西開始橫行於美國西南部，犯下一連串膽大包天的搶案與犯罪行動，她成為政府當局的頭號懸賞要犯，並奠定了傳奇亡命之徒的地位。');
+		console.log(viewPic);
+	}
+	if(this.id==9) {
+		pik9.play();
+		viewPic = 9;
+		$('#charname').html('火爆鋼球 <br> 「別惹毛那隻倉鼠。」');
+		$('#Description').html('地平面月球殖民地的實驗中，其中一項是對動物施加基因治療，評估他們在月球長時間棲息的狀況。這些動物出現未曾預料到的副作用：其中許多動物的體型和腦功能大幅成長。大部分受試個體為黑猩猩或其他靈長類，但也有例外，其中包括一隻名為哈蒙德的倉鼠。<br><br>和其他動物一樣，哈蒙德的智能提升，也因此對周圍的世界更感好奇。之後，哈蒙德經常溜到這座月球基地的其他地方，讓基地的科學家們又好氣又好笑。他們總是能找回哈蒙德，並把他放回籠子，但始終想不出他為什麼會在晚上溜出籠子。哈蒙德在這段期間不斷學習技師的技能，而這些技能不久後便派上用場。<br><br>在黑猩猩群起反抗人類科學家，並控制殖民地後，一切便陷入混亂。雖然並不是所有動物都加入這場紛爭，而其中一頭名為溫斯頓的黑猩猩決定逃回地球，哈蒙德也因此嗅到機會。他製作了一座簡易型太空艙，趁溫斯頓不注意的時候裝上太空船，跟著他一起離開月球。當他們進入大氣層時，哈蒙德的太空艙與太空船脫離，最後降落在澳洲內陸的荒原地帶。<br><br>哈蒙德把這座太空艙改造成一台戰鬥機甲，讓他能混進廢鐵場討口飯吃。他的「火爆鋼球」在競技場逐漸嶄露頭角，並贏得最後的冠軍，但對於競技場眾人來說，這台機甲的駕駛始終是個謎。哈蒙德把贏得的獎金用於升級機甲，讓自己得以在由回收者控制、充滿危險的內陸地區生存。<br><br>哈蒙德開始自由闖蕩後，不斷探索自己的視野，並追尋全新的探險。');
+		console.log(viewPic);
+	}
+	if(this.id==10) {
+		pik10.play();
+		viewPic = 10;
+		$('#charname').html('禪亞塔 <br> 「本我不拘於形。」');
+		$('#Description').html('禪亞塔是一位具有高度智能的智械僧侶，在世上漫遊，尋找靈魂昇華之道。據說與他不期而遇之人，能夠拋棄舊有的本我。<br><br>許多年之前，在智械危機之後，有一群流浪的智械機器人體驗到所謂的精神覺醒。他們拋棄了程式預先設定好的生活，在喜馬拉雅山深處相互扶持，建立了一座僧院。在冥想多年並且徹思存在的本質之後，他們認為自己超越了人工智能的範疇，他們就像人類一樣也擁有靈魂。<br><br>在了解到他們在靈魂層面上和人類並無二致之後，泰哈薩‧蒙達塔這位神秘的機器人，帶領著這群僧侶試著去治癒智械危機對那一整個世代所造成的傷痕，並讓人類和機器人回歸和諧的社會關係。他們的信念被全球數百萬人接受，變成像是明星般的風雲人物。<br><br>不過禪亞塔這位僧侶並不認同這個新方向。他認為光靠教條式的指導，無法解決人類和智械機器人之間的問題。唯有個體之間的互動才能從根本解決問題。<br><br>禪亞塔最終走上他自己的道路，他離開了僧院並在全世界流浪，協助他在路上遇見的人脫離罣礙，找到內心的平靜。有必要的話他也會出手保護無辜的生命，無論對象是智械機器人或是人類。');
+		console.log(viewPic);
+	}
+	if(this.id==11) {
+		pik11.play();
+		viewPic = 11;
+		$('#charname').html('炸彈鼠 <br> 「今天適合搞破壞。」');
+		$('#Description').html('炸彈鼠是個炸彈狂，所到之處滿是混亂和毀滅。<br><br>由於澳洲智械生產中心的核融合反應爐遭受攻擊，使得澳洲內陸被輻射塵污染。在爆炸地點，遍地盡是該設施的殘磚破瓦以及變形的殘骸，成為一片幾乎無法居住的不毛之地。<br><br>幾乎，但還是有人生存下來。他們自稱是回收者，從生產中心的殘骸中回收可用之物，獨自形成一個無法無天的地下秩序。炸彈鼠曾是他們的一員，在廢墟中回收金屬和零件來維持生活。他跟其他人一樣，受到殘留的輻射感染，因而狂亂，使他對炸彈瘋狂著迷，製作出十分危險的炸彈。<br><br>他在智械生產中心的廢墟中發現了一個十分珍貴的秘密，雖然沒人知道他到底發現了什麼，但是從那之後，不管他到哪裡去，都會受到眾多賞金獵人、惡徒和投機份子的追殺。這種情況一直持續到他遇上攔路豬這個回收者集團的打手，才停止下來。炸彈鼠開出好處五五分的條件，讓攔路豬勉為其難的同意當他的私人保鑣。<br><br>炸彈鼠有攔路豬同行之後離開了澳洲內陸，開始在世界各地犯案，他們所到之處滿地瘡痍，只留下破壞與混亂。');
+		console.log(viewPic);
+	}
+	if(this.id==12) {
+		pik12.play();
+		viewPic = 12;
+		$('#charname').html('閃光 <br> 「小可愛，別擔心，救星來了！」');
+		$('#Description').html('所有的前捍衛者探員都知道，閃光是個可以進行時空跳躍的冒險家，也是一股難以抵擋的善良力量。<br><br>莉娜‧奧斯頓（代號：「閃光」）是入選捍衛者實驗飛行計畫中最年輕的人。她那無所畏懼的駕駛技巧相當出名，她也因此雀屏中選，參加了「滑流」傳送戰機的原型測試。但在第一次飛行的過程中，戰機的傳送矩陣發生故障，導致整台戰機消失，大家都認為莉娜殉職了。<br><br>但在幾個月之後莉娜重新出現了，不過這次她面臨的考驗和原先大大不同：她身上的分子和時間的流動無法同步，導致她必須忍受「時空解離症」。莉娜就像活著的鬼魂一樣，不定期會消失數小時到數天之久。即使在她出現的短暫時間內，她也無法保持實體型態。<br><br>捍衛者的醫生和科學家們都感到束手無策，決定放棄閃光。直到一位名叫溫斯頓的科學家設計出了時空加速器，這個裝置能讓閃光定位在當下的時刻。除此之外，閃光也因此獲得了控制自身時間流動速度的能力，她可以自由加快或減慢時間的流速。有了這個能力之後，她成為了捍衛者中最厲害的探員之一。<br><br>在捍衛者解散之後，閃光依舊進行著除暴安良的工作。只要哪裡有不公不義的跡象，閃光就會前去伸張正義。');
+		console.log(viewPic);
+	}
+
+})
+function changeDes(num){
+	if(num==0) {
+		console.log(viewPic);
+		$('#Description').html('《鬥陣特攻》設定於「智械危機」結束30年後，其背景故事跨越未來地球60年。在智械危機之前，人類一直處於科技高度發達的黃金時代。人類開發了具有人工智慧的機器人，它們在自動化的「智械中樞」中生產並在全球投入使用。後來，智械中樞開始生產一系列敵對的機器人，它們轉而攻擊人類。聯合國迅速組建了國際特遣部隊捍衛者，致力於消除智械威脅並恢復秩序。<br><br>兩名退伍軍人傑克·莫里森和加布里爾·雷耶斯負責管理捍衛者。儘管捍衛者成功地鎮壓了機器人起義，並將一批優秀的人才帶到了科技前沿，指揮官莫里森和萊耶斯的關係卻發生裂痕，後者成立了鬥陣特攻秘密行動部門「黑衛部隊」。捍衛者維護了世界幾十年的和平，這一時期稱為「鬥陣特攻時代」，但莫里森與雷耶斯之間的分歧卻逐漸加劇。捍衛者多次受到有不法行為的指控，輿論對此一片譁然，促使聯合國開啟調查。在此期間，一場爆炸摧毀了捍衛者位於瑞士的總部，莫里森和雷耶斯被官方宣布死亡。聯合國通過佩特拉法案，解散了捍衛者，並禁止任何鬥陣特攻類型的活動。<br><br>《鬥陣特攻》的故事發生於佩特拉法案生效多年後。沒有了捍衛者，大集團開始控制政府，戰爭一觸即發。俄羅斯出現了第二次智械危機的跡象。捍衛者前成員決定改革組織，在佩特拉法案的壓力下，招募老成員，並在戰鬥中獲得新成員。</p>');
+	}
+	if(num==1) {
+		pik1.play();
+		console.log(viewPic);
+		$('#charname').html('士兵76 <br> 「此刻，人人都是鬥士。」');
+		$('#Description').html('士兵76被各國列為追捕對象，為了揭發捍衛者解散的幕後真相，他孤身發起戰爭。<br><br>士兵76在全球各地發起一連串的攻擊事件，金融機構、地下公司，以及捍衛者設施都成為他的攻擊目標。雖然他的動機為何，外界無從得知，不過有些人認為他就是前捍衛者成員，誓言要揪出導致捍衛者解散的幕後黑手。<br><br>雖然身分成謎，不過大家相信他曾在美國的「士兵補強計畫」中受過訓練。他的肉體能力超越一般傳統士兵，再加上其他方面的強化，使他成為一名超絕的戰士。而且他手上還持有從捍衛者設施中偷走的劃時代高科技武器。<br><br>士兵76一直在調查，想找出有哪些人該為捍衛者的解散負起責任，沒人能阻止他將這些人繩之以法。');
+	}
+	if(num==2) {
+		pik2.play();
+		$('#charname').html('D.VA <br> 「就是要贏。」');
+		$('#Description').html('D.Va運用之前身為職業電競選手的高超技術，駕駛韓國最先進的機甲來保護家園。<br><br>20年前，巨大智械怪物從中國東海深處竄出，朝南韓發動攻擊。這個巨大、笨重的怪物對沿岸城市造成了莫大傷亡，然後返回深海之中。因此，南韓政府決定構建一支被稱為「MEKA」的無人機械裝甲戰鬥部隊，好在未來要面對的智械威脅中，保護人民居住的城市。<br><br>政府所害怕的事情並非空穴來風，因為每隔幾年，就會有個怪物從海底出現，攻擊南韓和附近的國家。智械機器人從這些攻擊行動中不斷學習，時常進行調整，以不同方式、不同外貌，搭配新的武器和能力發動攻擊。每次攻擊最後都會陷入僵局，雖然擊敗了怪物，但是卻無法將其完全摧毀。<br><br>智械的手段持續演進，終於成功癱瘓MEKA部隊的無人機控制網路，軍方在不得已的情況下，只好以駕駛員來操縱機甲。在苦無適當人選的情況下，政府決定招募韓國職業電競選手，因為他們具備相當的反應速度和直覺，相當適合控制機甲配備的先進武器系統。政府最後挑選了一批頂尖明星選手，其中一位就是「D.Va」宋荷娜。她除了因為高超技巧而著名，同時也是一位相當具有侵略性的選手，為了勝利不惜一切代價，她從來不會對敵人手下留情。<br><br>D.Va把這項新任務看成是比賽，一收到通知，就毫不畏懼地駕駛MEKA機甲衝向戰場，準備為國家擋下敵人。她最近更開始對粉絲直播整場戰鬥行動，她的一舉一動逐漸讓她受到世界的矚目。');
+		console.log(viewPic);
+	}
+	if(num==3) {
+		pik3.play();
+		$('#charname').html('碧姬 <br> 「我會證明自己的能耐！」');
+		$('#Description').html('碧姬‧林霍姆不再置身事外，她拿起武器捍衛那些需要保護的人民。<br><br>碧姬是武器工程師托比昂‧林霍姆最小的女兒，也是他第一個對機械工程展現興趣的小孩。碧姬大部分的閒暇時刻都在父親的工作檯邊，一邊見習工作﹑一邊磨練技術。碧姬承襲了父親在工程學上的天賦，但是她的專精和父親不同。托比昂製造出厲害武器而聞名世界（也可以說是惡名昭彰），而碧姬最感興趣的是製造裝甲與防禦系統。<br><br>每個人都以為碧姬會繼續當學徒，跟隨父親的腳步，但是她的計畫卻因為生命中另一位重要人物而改變。這個人是她父親的摯友與捍衛者同袍，萊因哈特‧威爾海姆。萊因哈特和林霍姆家族關係密切，還是碧姬的教父。在碧姬的成長過程中，他曾告訴她許多英雄與騎士精神的故事。在他退休與捍衛者解散之後，萊因哈特宣布他將踏上旅程，成為捍衛正義的遊俠騎士。在他出發冒險之前，碧姬出乎意料地要求擔任他的隨從一起同行。萊因哈特答應了。<br><br>身為隨從的碧姬肩負許多責任，其中最重要的是她得負責保養萊因哈特的十字軍護甲（她熟悉這款設計，因為目前的這一副正是她父親所製作）。但是她逐漸發現，她主要的工作應該是照顧萊因哈特。他的身體歷經長年戰鬥而衰弱，而她得保護他不因為狂熱的信念而受更多的傷。<br><br>最後她終於瞭解，只當個工程師是不夠的。要想支援萊因哈特，最好的方式是自己也成為一名戰士。於是，當萊因哈特訓練她的戰鬥技巧時，碧姬開始暗中製作她自己的護甲。<br><br>現在，碧姬與萊因哈特一起衝鋒陷陣，從一旁保護他，同時幫助其他有需要的人。透過一場場戰鬥，這對騎士與隨從在旅途中努力讓世界變得更加美好。');
+		console.log(viewPic);
+	}
+	if(num==4) {
+		pik4.play();
+		$('#charname').html('慈悲 <br> 「英雄永不消逝。」');
+		$('#Description').html('安琪拉‧齊格勒博士是位醫術高超的醫療人員、聰明的科學家，同時也是和平的忠實擁護者，對於受她照顧的人來說，她無疑就是個守護天使。<br><br>安琪拉原先是在一間著名的瑞士醫院工作，並且成為外科手術團隊的主治醫生，她在轉向應用奈米生物科技領域之後取得了重大突破，針對足以威脅性命的疾病和傷殘人員開發出效果卓越的療法。也就是因為這個專業領域上的成就，吸引了捍衛者的注意。<br><br>因為安琪拉的雙親都在大戰中失去性命，她相當反對組織以軍事力量達成世界和平的方式。但最終安琪拉發現，在捍衛者裡讓她有機會去拯救更多生命。安琪拉身為捍衛者醫學研究方面的領導人，試著將她的醫療成果應用在充滿危機的前線，因而催生了女武神快速反應裝，安琪拉本人也經常穿著這身配備參與捍衛者的任務。<br><br>即便她為捍衛者做出了許多奉獻，安琪拉還是經常覺得她的理想和組織的整體目標有所衝突。於是在捍衛者解散之後，安琪拉便獻身於那些因戰亂而受苦的人們。<br><br>即便是將大部分的時間用來照顧世界上戰亂地區流離失所的人們，但當無辜的人們受威脅時，安琪拉‧齊格勒博士還是會穿著女武神急救裝現身。');
+		console.log(viewPic);
+	}
+	if(num==5) {
+		pik5.play();
+		$('#charname').html('源氏 <br> 「就算失去身體，我也絕對不會喪失心中的榮耀。」');
+		$('#Description').html('島田源氏原本十分排斥現在這個半人半機械的身體，如今他已經接受這個事實，並且能夠運用自如，同時發現更高層次的人性真諦。<br><br>源氏出生於島田忍者世家，他是年紀最小的老么，過著富貴榮華的生活。他對家族所進行的非法事業毫無興趣，雖然他熱愛忍者修業，也在這方面表現十分優異，不過他大部份的時間都過著花花公子般的生活。在父親的寵愛與保護下，源氏過著無憂無慮的生活；家族中有許多人覺得他會成為家族的弱點，因此開始怨恨他的父親。後來，島田組的首領早逝，源氏的大哥半藏要求他積極參與組織內的事務，支撐父親留下的龐大帝國；但是源氏拒絕了，半藏為之震怒。兄弟倆的緊張氣氛演變為暴力衝突，源氏輸了，身陷死亡邊緣。<br><br>半藏以為自己親手殺死了弟弟，不過多虧捍衛者和安琪拉‧齊格勒醫生從中介入，從鬼門關前救回了源氏。這支全球維安部隊認為在往後對抗島田組的戰鬥中，源氏會成為有力的一步棋。源氏的傷勢漸漸復原，捍衛者決定改造他的身體，好爭取他的支持。他的身體有大半被替換成生化機械，大幅提高他已經十分敏捷的速度，同時也讓他原本卓越的忍者身手更上一層樓。源氏化為一具活生生的兵器，全心投入摧毀島田家犯罪帝國這個任務。<br><br>但是隨著時間過去，源氏漸漸感受到自己的身體在互相抗衡；肉身與機械互相排斥，他也不知道他到底是個怎樣的人。他在任務結束後，離開了捍衛者，然後踏上尋求存在意義的旅程。他流浪多年，然後遇上智械僧侶禪亞塔。一開始，源氏不願接受禪亞塔的智慧箴言，但是這位仁慈的智械機械人並沒有因此放棄。慢慢的，禪亞塔成為他的導師，在這位僧侶的悉心開導下，他終於接受了這個身體，肉身與機械和諧並存。他學會了去接受事實，即使身體是由生化機械所構成，並無損他自身靈魂的完整性，於是他將這個身體視為一種禮物，視為一種獨特的優勢。<br><br>於是，他這輩子第一次獲得真正的自由。雖然他不知道，他的未來歸向何方。');
+		console.log(viewPic);
+	}
+	if(num==6) {
+		$('#charname').html('毀滅拳王 <br> 「衝突，為我們帶來進化。」');
+		$('#Description').html('近期逃出牢獄的毀滅拳王決心重返世界製造新的衝突，他相信這能使人類變得更堅強。<br><br>阿坎德‧歐岡帝姆出身於一個地位崇高的奈及利亞家庭，並繼承家族的義肢科技公司。歐岡帝姆非常聰明而且充滿個人魅力，他協助擴展家族事業，為企業的發展定位，並同時醉心於熱愛的嗜好：格鬥武術。他進行傳統的非洲格鬥訓練，包括「丹貝」與「吉迪博」，以及摔角和其他現代格鬥技能，將技巧融合到招式中。歐岡帝姆到處參賽，以他的直覺與能力來看穿對手的心思，同時運用敏捷的動作和無窮的蠻力擊垮對方。<br><br>他在智械危機期間失去右臂，他的武術生涯看似尚未達到巔峰便已結束。家族企業生產的生化機械義肢讓他從重創中康復，甚至變得更加強大，可是他也從此無緣參加競賽。他嘗試將對於武術的熱誠投入事業當中，但是卻填補不了內心的空虛…直到第二代毀滅拳王「努巴尼之禍」阿金吉德‧阿迪耶米給了他一個新的機會。<br><br>阿迪耶米讓歐岡帝姆擔任傭兵與他一起戰鬥。歐岡帝姆剛開始有所提防，但是後來卻發現他有了新天地來施展強大的力量。最後阿迪耶米帶領他加入利爪組織。利爪組織相信人類能從衝突中成長茁壯與歐岡帝姆的個人經驗不謀而合。此外，利爪組織的權力鬥爭帶來新的挑戰，讓他在幕後謀畫的同時也能在戰場上發揮實力。<br><br>阿迪耶米是利爪組織的得力助手，但是組織從歐岡帝姆的才智和鼓舞他人的領導才能看出他的潛能。阿迪耶米滿足於掠奪努巴尼所獲得的財富，歐岡帝姆卻有更宏大的願景。抱負上的差異最後導致歐岡帝姆動手除掉恩師，奪走毀滅拳王的披風與裝甲拳套。<br><br>身為新任毀滅拳王，歐岡帝姆在利爪組織中擁有崇高的地位，並協助策畫一場武裝衝突，組織希望有朝一日能在全世界掀起動亂。但是就在計畫即將實現之際，捍衛者特遣隊擊敗歐岡帝姆，並且捉住了他，當時成員包含閃光、溫斯頓與源氏。好幾年來，他被監禁在戒備森嚴的機密設施裡，在裡頭耐心等待機會逃亡。<br><br>終於，他察覺復出的時候到了。他逃出監獄，與努巴尼新亮相的OR15型機器人展開戰鬥，取得壓倒性的勝利，奪走毀滅拳王的裝甲拳套。現在，他在利爪組織高層重獲一席之地，準備推動下一波襲捲世界的戰爭。');
+		console.log(viewPic);
+	}
+	if(num==7) {
+		pik7.play();
+		$('#charname').html('莫伊拉 <br> 「科學會揭示真理。」');
+		$('#Description').html('科學家莫伊拉‧歐卓藍絕頂聰明﹑正邪莫辨，可說是基因工程界的佼佼者。她一直在研究如何重新編寫生命構成的基礎元素。<br><br>數十年前，歐卓藍發表一篇廣受爭議的報告，裡頭詳述可以從細胞層面改變DNA﹑自訂基因工程的方法。這似乎是戰勝疾病﹑拓展人類潛能的一大進展。<br><br>她隨即受到同儕的撻伐。許多人由於這項研究所引發的道德問題而認為她的工作具有危險性，甚至有人認為歐卓藍跟為了追求科學進展而引發智械危機的人沒有兩樣。此外，由於其他的基因工程學家無法複製莫伊拉的研究結果，使得人們對她的研究發現產生懷疑。她的研究報告不僅沒有讓研究生涯更進一步，反而重創她的名聲。<br><br>就在這個時候，她意外得到捍衛者秘密部門「黑衛部隊」的援助。她在幕後繼續工作，同時為組織研發新的武器與科技。她的身分極度保密，直到在威尼斯發生的那場意外後才洩漏出去，當時許多捍衛者的高階官員皆否認莫伊拉是他們的成員。<br><br>捍衛者解散之後，歐卓藍不得不尋求非正統的協助。此時，成立綠洲城的科學組織邀請她加入。然而，傳聞行事詭秘的利爪組織已支援她多年，以使用研究成果作為交換來贊助她的實驗。<br><br>雖然歐卓藍為了在科學方面有所突破，不惜採取任何手段，世人對她的研究卻不太了解。不過現在，她擺脫了所有的束縛，改變只是時間的問題。');
+		console.log(viewPic);
+	}
+	if(num==8) {
+		pik8.play();
+		$('#charname').html('艾西 <br> 「我的場子，只能由我做主。」');
+		$('#Description').html('艾西是亡鎖幫野心勃勃又有謀略的首領，而且是地下黑幫中備受推崇的人物。<br><br>艾西出身富裕，從小就在上流社會中長大。她的雙親是搶手的商業顧問，專門指導世界各地權傾一時的公司總裁。儘管父母無暇照顧她（大部分的時候將她交給家裡的智械管家鮑伯），但是他們盡全力栽培艾西成為社會菁英。在某次機遇中，艾西遇見當地一位名叫傑西‧麥卡利的街頭混混，捲入一場即興的犯罪中。這次經驗讓她大開眼界，找到了自己真正的興趣。智取對手時的滿足感與逃亡的刺激，讓她就此踏上亡命之路。<br><br>她跟著其他三位亡鎖幫的元老一起闖蕩江湖，著手犯下規模更大﹑金額更高的搶案來打響名聲。亡鎖幫的快速崛起，使他們與美國西南部的其他犯罪組織產生摩擦；衝突往往一發不可收拾。經過多年的小規模戰鬥與流血事件，艾西終於召集各大幫派的首腦。<br><br>艾西看出結合各方勢力的發展潛力。她運用從父母身上學到的商業策略，將制度帶入幫派。她提議各幫派可以齊心合作（至少不要互相攻擊）。她的原則是：遵守諾言﹑不遵守法律﹑尊重彼此的領域，而且嚴懲叛徒。<br><br>自從不用再花精力在幫派內鬥上，艾西開始橫行於美國西南部，犯下一連串膽大包天的搶案與犯罪行動，她成為政府當局的頭號懸賞要犯，並奠定了傳奇亡命之徒的地位。');
+		console.log(viewPic);
+	}
+	if(num==9) {
+		pik9.play();
+		$('#charname').html('火爆鋼球 <br> 「別惹毛那隻倉鼠。」');
+		$('#Description').html('地平面月球殖民地的實驗中，其中一項是對動物施加基因治療，評估他們在月球長時間棲息的狀況。這些動物出現未曾預料到的副作用：其中許多動物的體型和腦功能大幅成長。大部分受試個體為黑猩猩或其他靈長類，但也有例外，其中包括一隻名為哈蒙德的倉鼠。<br><br>和其他動物一樣，哈蒙德的智能提升，也因此對周圍的世界更感好奇。之後，哈蒙德經常溜到這座月球基地的其他地方，讓基地的科學家們又好氣又好笑。他們總是能找回哈蒙德，並把他放回籠子，但始終想不出他為什麼會在晚上溜出籠子。哈蒙德在這段期間不斷學習技師的技能，而這些技能不久後便派上用場。<br><br>在黑猩猩群起反抗人類科學家，並控制殖民地後，一切便陷入混亂。雖然並不是所有動物都加入這場紛爭，而其中一頭名為溫斯頓的黑猩猩決定逃回地球，哈蒙德也因此嗅到機會。他製作了一座簡易型太空艙，趁溫斯頓不注意的時候裝上太空船，跟著他一起離開月球。當他們進入大氣層時，哈蒙德的太空艙與太空船脫離，最後降落在澳洲內陸的荒原地帶。<br><br>哈蒙德把這座太空艙改造成一台戰鬥機甲，讓他能混進廢鐵場討口飯吃。他的「火爆鋼球」在競技場逐漸嶄露頭角，並贏得最後的冠軍，但對於競技場眾人來說，這台機甲的駕駛始終是個謎。哈蒙德把贏得的獎金用於升級機甲，讓自己得以在由回收者控制、充滿危險的內陸地區生存。<br><br>哈蒙德開始自由闖蕩後，不斷探索自己的視野，並追尋全新的探險。');
+		console.log(viewPic);
+	}
+	if(num==10) {
+		pik10.play();
+		$('#charname').html('禪亞塔 <br> 「本我不拘於形。」');
+		$('#Description').html('禪亞塔是一位具有高度智能的智械僧侶，在世上漫遊，尋找靈魂昇華之道。據說與他不期而遇之人，能夠拋棄舊有的本我。<br><br>許多年之前，在智械危機之後，有一群流浪的智械機器人體驗到所謂的精神覺醒。他們拋棄了程式預先設定好的生活，在喜馬拉雅山深處相互扶持，建立了一座僧院。在冥想多年並且徹思存在的本質之後，他們認為自己超越了人工智能的範疇，他們就像人類一樣也擁有靈魂。<br><br>在了解到他們在靈魂層面上和人類並無二致之後，泰哈薩‧蒙達塔這位神秘的機器人，帶領著這群僧侶試著去治癒智械危機對那一整個世代所造成的傷痕，並讓人類和機器人回歸和諧的社會關係。他們的信念被全球數百萬人接受，變成像是明星般的風雲人物。<br><br>不過禪亞塔這位僧侶並不認同這個新方向。他認為光靠教條式的指導，無法解決人類和智械機器人之間的問題。唯有個體之間的互動才能從根本解決問題。<br><br>禪亞塔最終走上他自己的道路，他離開了僧院並在全世界流浪，協助他在路上遇見的人脫離罣礙，找到內心的平靜。有必要的話他也會出手保護無辜的生命，無論對象是智械機器人或是人類。');
+		console.log(viewPic);
+	}
+	if(num==11) {
+		pik11.play();
+		$('#charname').html('炸彈鼠 <br> 「今天適合搞破壞。」');
+		$('#Description').html('炸彈鼠是個炸彈狂，所到之處滿是混亂和毀滅。<br><br>由於澳洲智械生產中心的核融合反應爐遭受攻擊，使得澳洲內陸被輻射塵污染。在爆炸地點，遍地盡是該設施的殘磚破瓦以及變形的殘骸，成為一片幾乎無法居住的不毛之地。<br><br>幾乎，但還是有人生存下來。他們自稱是回收者，從生產中心的殘骸中回收可用之物，獨自形成一個無法無天的地下秩序。炸彈鼠曾是他們的一員，在廢墟中回收金屬和零件來維持生活。他跟其他人一樣，受到殘留的輻射感染，因而狂亂，使他對炸彈瘋狂著迷，製作出十分危險的炸彈。<br><br>他在智械生產中心的廢墟中發現了一個十分珍貴的秘密，雖然沒人知道他到底發現了什麼，但是從那之後，不管他到哪裡去，都會受到眾多賞金獵人、惡徒和投機份子的追殺。這種情況一直持續到他遇上攔路豬這個回收者集團的打手，才停止下來。炸彈鼠開出好處五五分的條件，讓攔路豬勉為其難的同意當他的私人保鑣。<br><br>炸彈鼠有攔路豬同行之後離開了澳洲內陸，開始在世界各地犯案，他們所到之處滿地瘡痍，只留下破壞與混亂。');
+		console.log(viewPic);
+	}
+	if(num==12) {
+		pik12.play();
+	$('#charname').html('閃光 <br> 「小可愛，別擔心，救星來了！」');
+		$('#Description').html('所有的前捍衛者探員都知道，閃光是個可以進行時空跳躍的冒險家，也是一股難以抵擋的善良力量。<br><br>莉娜‧奧斯頓（代號：「閃光」）是入選捍衛者實驗飛行計畫中最年輕的人。她那無所畏懼的駕駛技巧相當出名，她也因此雀屏中選，參加了「滑流」傳送戰機的原型測試。但在第一次飛行的過程中，戰機的傳送矩陣發生故障，導致整台戰機消失，大家都認為莉娜殉職了。<br><br>但在幾個月之後莉娜重新出現了，不過這次她面臨的考驗和原先大大不同：她身上的分子和時間的流動無法同步，導致她必須忍受「時空解離症」。莉娜就像活著的鬼魂一樣，不定期會消失數小時到數天之久。即使在她出現的短暫時間內，她也無法保持實體型態。<br><br>捍衛者的醫生和科學家們都感到束手無策，決定放棄閃光。直到一位名叫溫斯頓的科學家設計出了時空加速器，這個裝置能讓閃光定位在當下的時刻。除此之外，閃光也因此獲得了控制自身時間流動速度的能力，她可以自由加快或減慢時間的流速。有了這個能力之後，她成為了捍衛者中最厲害的探員之一。<br><br>在捍衛者解散之後，閃光依舊進行著除暴安良的工作。只要哪裡有不公不義的跡象，閃光就會前去伸張正義。');
+		console.log(viewPic);
+}
+}
+function changeCHAR(){
+	viewPic = $('#selectCHAR').val();
+	changeDes(viewPic);
+}
+
+init();
+animate();
+function buildHpic(){
+	var p0 = new THREE.TextureLoader().load('strts/ow.jpg');
+	var p1 = new THREE.TextureLoader().load('strts/76.jpg');
+	var p2 = new THREE.TextureLoader().load('strts/dva.jpg');
+	var p3 = new THREE.TextureLoader().load('strts/ashe-screenshot-002.jpg');
+	var p4 = new THREE.TextureLoader().load('strts/brigitte-screenshot-002.jpg');
+	var p5 = new THREE.TextureLoader().load('strts/genji-theatrical-wide.jpg');
+	var p6 = new THREE.TextureLoader().load('strts/mercy-theatrical-wide.jpg');
+	var p7 = new THREE.TextureLoader().load('strts/moira-screenshot-002.jpg');
+	var p8 = new THREE.TextureLoader().load('strts/tracer-wallpaper-wide.jpg');
+	var p9 = new THREE.TextureLoader().load('strts/wrecking-ball-screenshot-03.jpg');
+	var p10 = new THREE.TextureLoader().load('strts/zenyatta-screenshot-008.jpg');
+	var p11 = new THREE.TextureLoader().load('strts/doomfist-screenshot-003.jpg');
+	var p12 = new THREE.TextureLoader().load('strts/junkrat-screenshot-004.jpg');
+	
+	var Highpicture0 = new THREE.Mesh( new THREE.PlaneGeometry(179.2, 100.8, 32 ), new THREE.MeshPhongMaterial({
+	map: p0,
+	side: THREE.DoubleSide}));
+	Highpicture0.position.set(-205,80,-11);
+	Highpicture0.rotation.y = Math.PI;
+	
+	var Highpicture = new THREE.Mesh( new THREE.PlaneGeometry(128, 72, 32 ), new THREE.MeshPhongMaterial({
+	map: p1,
+	side: THREE.DoubleSide}));
+	Highpicture.position.set(-210, 80, -295);
+	
+	var Highpicture2 = new THREE.Mesh( new THREE.PlaneGeometry( 179.2,100.8 , 32 ), new THREE.MeshPhongMaterial({
+	map: p2,
+	side: THREE.DoubleSide}));
+	Highpicture2.position.set(-295,80,-150);
+	Highpicture2.rotation.y = Math.PI/2;
+	
+	var Highpicture3 = new THREE.Mesh( new THREE.PlaneGeometry( 192, 108, 32 ), new THREE.MeshPhongMaterial({
+	map: p3,
+	side: THREE.DoubleSide}));
+	Highpicture3.position.set(-205,80,11);
+	Highpicture3.rotation.y = Math.PI;
+	
+	var Highpicture4 = new THREE.Mesh( new THREE.PlaneGeometry( 179.2, 100.8, 32 ), new THREE.MeshPhongMaterial({
+	map: p4,
+	side: THREE.DoubleSide}));
+	Highpicture4.position.set(-89,80,-210);
+	Highpicture4.rotation.y = Math.PI/2;
+	
+	var Highpicture5 = new THREE.Mesh( new THREE.PlaneGeometry( 179.2, 100.8, 32 ), new THREE.MeshPhongMaterial({
+	map: p5,
+	side: THREE.DoubleSide}));
+	Highpicture5.position.set(295,80,-155);
+	Highpicture5.rotation.y = -Math.PI/2;
+	
+	var Highpicture6 = new THREE.Mesh( new THREE.PlaneGeometry( 179.2, 100.8, 32 ), new THREE.MeshPhongMaterial({
+	map: p6,
+	side: THREE.DoubleSide}));
+	Highpicture6.position.set(170,80,-295);
+	
+	var Highpicture7 = new THREE.Mesh( new THREE.PlaneGeometry( 179.2, 100.8, 32 ), new THREE.MeshPhongMaterial({
+	map: p7,
+	side: THREE.DoubleSide}));
+	Highpicture7.position.set(195,80,-9);
+	
+	var Highpicture8 = new THREE.Mesh( new THREE.PlaneGeometry( 179.2, 100.8, 32 ), new THREE.MeshPhongMaterial({
+	map: p8,
+	side: THREE.DoubleSide}));
+	Highpicture8.position.set(20,80,295);
+	Highpicture8.rotation.y = Math.PI;
+	
+	var Highpicture9 = new THREE.Mesh( new THREE.PlaneGeometry( 179.2, 100.8, 32 ), new THREE.MeshPhongMaterial({
+	map: p9,
+	side: THREE.DoubleSide}));
+	Highpicture9.position.set(-295,80,160);
+	Highpicture9.rotation.y = Math.PI/2;
+	
+	var Highpicture10 = new THREE.Mesh( new THREE.PlaneGeometry( 179.2, 100.8, 32 ), new THREE.MeshPhongMaterial({
+	map: p10,
+	side: THREE.DoubleSide}));
+	Highpicture10.position.set(-111,80,200);
+	Highpicture10.rotation.y = -Math.PI/2;
+	
+	var Highpicture11 = new THREE.Mesh( new THREE.PlaneGeometry( 190, 106, 32 ), new THREE.MeshPhongMaterial({
+	map: p11,
+	side: THREE.DoubleSide}));
+	Highpicture11.position.set(197,80,-31);
+	Highpicture11.rotation.y = -Math.PI;
+	
+	var Highpicture12 = new THREE.Mesh( new THREE.PlaneGeometry( 179.2, 100.8, 32 ), new THREE.MeshPhongMaterial({
+	map: p12,
+	side: THREE.DoubleSide}));
+	Highpicture12.position.set(-89,80,200);
+	Highpicture12.rotation.y = -Math.PI/2;
+	
+	scene.add(Highpicture0,Highpicture,Highpicture2,Highpicture3,Highpicture4,Highpicture5,Highpicture6,Highpicture7,Highpicture8,Highpicture9,Highpicture10,Highpicture11,Highpicture12);
+}
+function changeHigh(){
+	cameraHigh.rotation.y = 0;
+	if(viewPic==0){
+		cameraHigh.position.set(-210, 80, -210);
+		cameraHigh.rotation.y=(Math.PI);
+	}
+	if(viewPic==1){
+		cameraHigh.position.set(-210, 80, -160);
+	}
+	if(viewPic==2){
+		cameraHigh.position.set(-110, 80, -150);
+		cameraHigh.rotation.y=(Math.PI/2);
+	}
+	if(viewPic==3){
+		cameraHigh.position.set(117, 80, -216);
+		cameraHigh.rotation.y=(Math.PI/2);
+	}
+	if(viewPic==4){
+		cameraHigh.position.set(170,80,-105);
+	}
+	if(viewPic==5){
+		cameraHigh.position.set(105,80,-155);
+		cameraHigh.rotation.y=(-Math.PI/2);
+	}
+	if(viewPic==6){
+		cameraHigh.position.set(197,80,-250);
+		cameraHigh.rotation.y=(-Math.PI);
+	}
+	if(viewPic==7){
+		cameraHigh.position.set(197,98,180);
+	}
+	if(viewPic==8){
+		cameraHigh.position.set(-205,80,211);
+	}
+	if(viewPic==9){
+		cameraHigh.position.set(-120,80,160);;
+		cameraHigh.rotation.y=(Math.PI/2);
+	}
+	if(viewPic==10){
+		cameraHigh.position.set(-280,80,200);
+		cameraHigh.rotation.y=(-Math.PI/2);
+	}
+	if(viewPic==11){
+		cameraHigh.position.set(100,80,200);
+		cameraHigh.rotation.y=(Math.PI/2);
+	}
+	if(viewPic==12){
+		cameraHigh.position.set(20,80,100);
+		cameraHigh.rotation.y=(Math.PI);
+	}
+	
+}
+
+function buildwall(){
+	var wall = new THREE.Object3D();
+	
+	var texture = new THREE.TextureLoader().load('strts/woodfloor.jpg');
+	texture.repeat.set(3,3);
+	texture.wrapS = THREE.RepeatWrapping;
+	texture.wrapT = THREE.RepeatWrapping;
+	
+	
+	
+	var floor = new THREE.Mesh( new THREE.PlaneGeometry( 600, 600, 32 ), new THREE.MeshPhongMaterial({
+	map: texture,
+	side: THREE.DoubleSide
+	}));
+	floor.rotation.x=(Math.PI/2);
+	wall.add(floor);
+	
+	var texture2 = new THREE.TextureLoader().load('strts/wall.jpg');
+	
+	var texture3 = new THREE.TextureLoader().load('strts/chair.jpg');
+	texture3.repeat.set(3,3);
+	texture3.wrapS = THREE.RepeatWrapping;
+	texture3.wrapT = THREE.RepeatWrapping;
+
+	var wall1 = new THREE.Mesh( new THREE.BoxGeometry( 250, 150, 5 ), new THREE.MeshPhongMaterial({
+	map: texture2,
+	side: THREE.DoubleSide
+	}));
+	wall1.position.set (175,75,-300)
+	wall.add(wall1);
+	
+	var wall11 = new THREE.Mesh( new THREE.BoxGeometry( 250, 150, 5 ), new THREE.MeshPhongMaterial({
+	map: texture2,
+	side: THREE.DoubleSide
+	}));
+	wall11.position.set (-175,75,-300)
+	wall.add(wall11);
+	
+	var wall2 = new THREE.Mesh( new THREE.BoxGeometry( 600, 150, 5 ), new THREE.MeshPhongMaterial({
+	map: texture2,
+	side: THREE.DoubleSide
+	}));
+	wall2.position.set (0,75,300)
+	wall.add(wall2);
+	
+	var wall3 = new THREE.Mesh( new THREE.BoxGeometry( 600, 150, 5 ), new THREE.MeshPhongMaterial({
+	map: texture2,
+	side: THREE.DoubleSide
+	}));
+	wall3.position.set (-300,75,0)
+	wall3.rotation.y=(Math.PI/2);
+	wall.add(wall3);
+	
+	var wall4 = new THREE.Mesh( new THREE.BoxGeometry( 600, 150, 5 ), new THREE.MeshPhongMaterial({
+	map: texture2,
+	side: THREE.DoubleSide
+	}));
+	wall4.position.set (300,75,0)
+	wall4.rotation.y=(Math.PI/2);
+	wall.add(wall4);
+	
+	var wall5 = new THREE.Mesh( new THREE.BoxGeometry( 180, 150, 20 ), new THREE.MeshPhongMaterial({
+	map: texture2,
+	side: THREE.DoubleSide
+	}));
+	wall5.position.set (-100,75,-210)
+	wall5.rotation.y=(Math.PI/2);
+	wall.add(wall5);
+	
+	var wall6 = new THREE.Mesh( new THREE.BoxGeometry( 200, 150, 20 ), new THREE.MeshPhongMaterial({
+	map: texture2,
+	side: THREE.DoubleSide
+	}));
+	wall6.position.set (-200,75,0)
+	wall.add(wall6);
+	
+	var wall7 = new THREE.Mesh( new THREE.BoxGeometry( 200, 150, 20 ), new THREE.MeshPhongMaterial({
+	map: texture2,
+	side: THREE.DoubleSide
+	}));
+	wall7.position.set (-100,75,200)
+	wall7.rotation.y=(Math.PI/2);
+	wall.add(wall7);
+	
+	var wall8 = new THREE.Mesh( new THREE.BoxGeometry( 200, 150, 20 ), new THREE.MeshPhongMaterial({
+	map: texture2,
+	side: THREE.DoubleSide
+	}));
+	wall8.position.set (200,75,-20)
+	wall.add(wall8);
+	
+	var box1 = new THREE.Mesh( new THREE.BoxGeometry( 30, 60, 30 ), new THREE.MeshPhongMaterial({
+	map: texture2,
+	side: THREE.DoubleSide
+	}));
+	box1.position.set (120,30,-160)
+	wall.add(box1);
+	
+	var box2 = new THREE.Mesh( new THREE.BoxGeometry( 50, 60, 50 ), new THREE.MeshPhongMaterial({
+	map: texture2,
+	side: THREE.DoubleSide
+	}));
+	box2.position.set (40,30,-30)
+	wall.add(box2);
+	
+	var box3 = new THREE.Mesh( new THREE.BoxGeometry( 50, 60, 50 ), new THREE.MeshPhongMaterial({
+	map: texture2,
+	side: THREE.DoubleSide
+	}));
+	box3.position.set (-30,30,100)
+	wall.add(box3);
+	
+	var chair = new THREE.Mesh( new THREE.BoxGeometry(110, 30, 50 ), new THREE.MeshPhongMaterial({
+	map: texture3,
+	side: THREE.DoubleSide
+	}));
+	chair.position.set (160,15,60)
+	wall.add(chair);
+	
+	var chair2 = new THREE.Mesh( new THREE.BoxGeometry(110, 30, 50 ), new THREE.MeshPhongMaterial({
+	map: texture3,
+	side: THREE.DoubleSide
+	}));
+	chair2.position.set (160,15,250)
+	wall.add(chair2);
+	
+	var chair3 = new THREE.Mesh( new THREE.BoxGeometry(110, 30, 50 ), new THREE.MeshPhongMaterial({
+	map: texture3,
+	side: THREE.DoubleSide
+	}));
+	chair3.position.set (250,15,150)
+	chair3.rotation.y = Math.PI/2
+	wall.add(chair3);
+	
+	scene.add(wall);
+
+}
+function init() {
+
+	pik1 = document.getElementById ('pick');
+	pik2 = document.getElementById ('pick2');
+	pik3 = document.getElementById ('pick3');
+	pik4 = document.getElementById ('pick4');
+	pik5 = document.getElementById ('pick5');
+	pik7 = document.getElementById ('pick7');
+	pik8 = document.getElementById ('pick8');
+	pik9 = document.getElementById ('pick9');
+	pik10 = document.getElementById ('pick10');
+	pik11 = document.getElementById ('pick11');
+	pik12 = document.getElementById ('pick12');
+	soundTrack = document.getElementById ('soundtrack');
+	
+	var windowW = $("#container").innerWidth();
+	var windowH = $("#container").innerHeight();	
+	var cc = document.getElementById('mycanvas');
+	renderer = new THREE.WebGLRenderer({
+    canvas: cc
+  });
+  
+	cameraHigh = new THREE.PerspectiveCamera(50, windowW / windowH, 1, 3000);
+	renderer.setSize(windowW, windowH);
+	
+	//controls1 = new THREE.OrbitControls(cameraHigh, renderer.domElement);
+	
+	var windowW6 = $("#container6").innerWidth();
+	var windowH6 = $("#container6").innerHeight();	
+	var cc6 = document.getElementById('mycanvas6');
+	renderer6 = new THREE.WebGLRenderer({
+    canvas: cc6
+  });
+	
+	scene = new THREE.Scene();
+	//renderer = new THREE.WebGLRenderer();
+	renderer6.setSize(windowW6, windowH6);
+	//renderer.setClearColor(0x888888);
+	//$("#container").append(renderer.domElement);
+	
+	camera = new THREE.PerspectiveCamera(50, windowW6 / windowH6, 1, 3000);
+	camera.position.x = 0;
+	camera.position.z = 70;  // important
+	camera.position.y = 700;
+	
+	controls = new THREE.OrbitControls(camera, renderer6.domElement);
+	
+	  
+	let gridXZ = new THREE.GridHelper(100, 10, 'red', 'white');
+	//scene.add(gridXZ);
+
+	let axes = new THREE.AxisHelper (10);
+	//scene.add (axes);
+	//window.addEventListener('resize', onWindowResize, false);
+	//////////////LIGHT/////////////////
+	setting = new THREE.HemisphereLight( 0xffffff, 0x080820, 1 );
+	scene.add( setting ); 
+	//////////////build/////////////////
+	buildwall();
+	////////////////////////////////////
+	var windowW5 = $("#container5").innerWidth();
+	var windowH5 = $("#container5").innerHeight();	
+	var cc5 = document.getElementById('mycanvas5');
+	renderer5 = new THREE.WebGLRenderer({
+    canvas: cc5
+  });
+	renderer5.setSize(windowW5, windowH5);
+	
+	
+	sCam = new THREE.PerspectiveCamera(50, windowW5 / windowH5, 1, 1000);
+	cameraObj = new THREE.Object3D();
+	cameraBody = new THREE.Mesh (new THREE.BoxGeometry (20,12,5), new THREE.MeshNormalMaterial());
+	lens = new THREE.Mesh (new THREE.CylinderGeometry (5,5,10), new THREE.MeshNormalMaterial());
+	lens.position.z = -5;
+	lens.rotation.x = Math.PI/2;
+	cameraObj.add (cameraBody, lens);
+	cameraCase = new THREE.Object3D();
+	cameraCase.add (cameraObj);
+	cameraCase.position.set (290, 130, 290);
+	scene.add (cameraCase);
+	cameraCase.rotation.y = Math.PI/4; 
+	cameraCase.rotation.x = -Math.PI/7;
+	cameraCase.rotation.order = 'YXZ'
+	
+	
+	var windowW2 = $("#container2").innerWidth();
+	var windowH2 = $("#container2").innerHeight();	
+	var cc2 = document.getElementById('mycanvas2');
+	renderer2 = new THREE.WebGLRenderer({
+    canvas: cc2
+  });
+	renderer2.setSize(windowW2, windowH2);
+	
+	sCam2 = new THREE.PerspectiveCamera(50, windowW2 / windowH2, 1, 1000);
+	cameraObj2 = cameraObj.clone();
+	cameraCase2 = new THREE.Object3D();
+	cameraCase2.add (cameraObj2);
+	cameraCase2.position.set (-290, 130, 290);
+	scene.add (cameraCase2);
+	cameraCase2.rotation.y = -Math.PI/4; 
+	cameraCase2.rotation.x = -Math.PI/7;
+	cameraCase2.rotation.order = 'YXZ'
+	
+	var windowW3 = $("#container3").innerWidth();
+	var windowH3 = $("#container3").innerHeight();	
+	var cc3 = document.getElementById('mycanvas3');
+	renderer3 = new THREE.WebGLRenderer({
+    canvas: cc3
+  });
+	renderer3.setSize(windowW3, windowH3);
+	
+	sCam3 = new THREE.PerspectiveCamera(50, windowW3 / windowH3, 1, 1000);
+	cameraObj3 = cameraObj.clone();
+	cameraCase3 = new THREE.Object3D();
+	cameraCase3.add (cameraObj3);
+	cameraCase3.position.set (290, 130, -290);
+	scene.add (cameraCase3);
+	cameraCase3.rotation.y = Math.PI-19.5; 
+	cameraCase3.rotation.x = -Math.PI/7;
+	cameraCase3.rotation.order = 'YXZ'
+	
+	var windowW4 = $("#container4").innerWidth();
+	var windowH4 = $("#container4").innerHeight();	
+	var cc4 = document.getElementById('mycanvas4');
+	renderer4 = new THREE.WebGLRenderer({
+    canvas: cc4
+  });
+	renderer4.setSize(windowW4, windowH4);
+	
+	sCam4 = new THREE.PerspectiveCamera(50, windowW4 / windowH4, 1, 1000);
+	cameraObj4 = cameraObj.clone();
+	cameraCase4 = new THREE.Object3D();
+	cameraCase4.add (cameraObj4);
+	cameraCase4.position.set (-290, 130, -290);
+	scene.add (cameraCase4);
+	cameraCase4.rotation.y = -Math.PI+0.5; 
+	cameraCase4.rotation.x = -Math.PI/7;
+	cameraCase4.rotation.order = 'YXZ'
+	
+	/////////////Light///////////////////////
+	
+	var amblight = new THREE.DirectionalLight( 0xaaaaaa , 0.5 ); // soft white light
+	scene.add( amblight );
+	amblight.position.set(-190, 175, -255)
+	
+	var amblight2 = new THREE.DirectionalLight( 0xaaaaaa , 0.5 ); // soft white light
+	scene.add( amblight2 );
+	amblight2.position.set(190, 175, 255)
+	
+	var amblight3 = new THREE.DirectionalLight( 0xaaaaaa , 0.5 ); // soft white light
+	scene.add( amblight3 );
+	amblight3.position.set(-190, 175, 255)
+	
+	var amblight4 = new THREE.DirectionalLight( 0xaaaaaa , 0.5 ); // soft white light
+	scene.add( amblight4 );
+	amblight4.position.set(190, 175, -255)
+	
+	
+	/////////////pic/////////////////////////
+	buildHpic();
+	
+}
+
+function onWindowResize() {
+
+	var ww = $("#container6").innerWidth();
+	var hh = $("#container6").innerHeight();
+
+   camera.aspect = ww / hh;
+  camera.updateProjectionMatrix();
+  //renderer.setSize(ww, hh);
+
+}
+
+function animate() {
+
+	soundVal = THREE.Math.clamp (soundVal, 0, 0.1);
+	soundtrack.volume = soundVal;
+
+  if(rotcam1==true){
+  
+  angle += 0.005*sign;
+  if (angle > 0.3 || angle < -0.3)
+  	sign *= -1;
+  
+  cameraObj.rotation.y = angle;
+  sCam.matrixWorld.copy (cameraObj.matrixWorld);
+  sCam.matrixAutoUpdate = false;
+  }
+  if(rotcam2==true){
+  
+  angle2 += 0.005*sign2;
+  if (angle2 > 0.3 || angle2 < -0.3)
+  	sign2 *= -1;
+  
+  cameraObj2.rotation.y = angle2;
+  sCam2.matrixWorld.copy (cameraObj2.matrixWorld);
+  sCam2.matrixAutoUpdate = false;
+  }
+  if(rotcam3==true){
+  
+  angle3 += 0.005*sign3;
+  if (angle3 > 0.3 || angle3 < -0.3)
+  	sign3 *= -1;
+  
+  cameraObj3.rotation.y = angle3;
+  sCam3.matrixWorld.copy (cameraObj3.matrixWorld);
+  sCam3.matrixAutoUpdate = false;
+  }
+  if(rotcam4==true){
+  
+  angle4 += 0.005*sign4;
+  if (angle4 > 0.3 || angle4 < -0.3)
+  	sign4 *= -1;
+  
+  cameraObj4.rotation.y = angle4;
+  sCam4.matrixWorld.copy (cameraObj4.matrixWorld);
+  sCam4.matrixAutoUpdate = false;
+  }
+  
+  //let cam = safety ? sCam : camera;
+  if(cameraview == 0){
+  cam = camera;
+  $('#cameraname').html('cameraFree');
+  }
+  if(cameraview == 1){
+  cam = sCam;
+   $('#cameraname').html('camera1');
+  }
+  if(cameraview == 2){
+  cam = sCam2;
+  $('#cameraname').html('camera2');
+  }
+  if(cameraview == 3){
+  cam = sCam3;
+   $('#cameraname').html('camera3');
+  }
+  if(cameraview == 4){
+  cam = sCam4;
+   $('#cameraname').html('camera4');
+  }
+  
+  changeHigh();
+  
+  
+  
+  renderer.render(scene, cameraHigh);
+  renderer2.render(scene, sCam);
+  renderer3.render(scene, sCam2);
+  renderer4.render(scene, sCam3);
+  renderer5.render(scene, sCam4);
+  renderer6.render(scene, cam);
+
+  controls.update();
+  //controls1.update();
+  requestAnimationFrame (animate);
+}
+
+</script><div><canvas width="1920" height="950" style="width: 1536px; height: 760px;"></canvas></div>
+
+
+
+</body></html>
